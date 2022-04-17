@@ -25,19 +25,16 @@ class HomePageTest(TestCase):
         self.assertEqual(response.status_code, 302)
         self.assertEqual(response['location'], '/lists/the-only-url/')
 
-    def test_render_all_items_in_template(self):
-        Item.objects.create(text="First item")
-        Item.objects.create(text="Second item")
-
-        response = self.client.get('/')
-        self.assertContains(response, 'First item')
-        self.assertContains(response, 'Second item')
-
     def test_save_item_when_necessary(self):
         response = self.client.get('/')
         self.assertEqual(0, Item.objects.count())
    
 class ViewListTest(TestCase):
+
+    def test_home_page_use_template(self):
+        response = self.client.get('/lists/the-only-url/')
+        self.assertTemplateUsed(response, 'view.html')
+
     def test_render_all_items_in_template(self):
         Item.objects.create(text="First item")
         Item.objects.create(text="Second item")
