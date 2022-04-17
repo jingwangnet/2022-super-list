@@ -23,7 +23,7 @@ class HomePageTest(TestCase):
         html = response.content.decode()
 
         self.assertEqual(response.status_code, 302)
-        self.assertEqual(response['location'], '/')
+        self.assertEqual(response['location'], '/lists/the-only-url/')
 
     def test_render_all_items_in_template(self):
         Item.objects.create(text="First item")
@@ -37,6 +37,14 @@ class HomePageTest(TestCase):
         response = self.client.get('/')
         self.assertEqual(0, Item.objects.count())
    
+class ViewListTest(TestCase):
+    def test_render_all_items_in_template(self):
+        Item.objects.create(text="First item")
+        Item.objects.create(text="Second item")
+
+        response = self.client.get('/lists/the-only-url/')
+        self.assertContains(response, 'First item')
+        self.assertContains(response, 'Second item')
     
 class ItemModelTest(TestCase):
 
