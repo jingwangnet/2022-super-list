@@ -7,7 +7,7 @@ from django.urls import resolve
 # Create your tests here.
 class HomePageTest(TestCase):
 
-    def test_home_page_use_template(self):
+    def test_use_home_template(self):
         response = self.client.get('/')
         self.assertTemplateUsed(response, 'home.html')
 
@@ -34,7 +34,7 @@ class NewListTest(TestCase):
 
 class ViewListTest(TestCase):
 
-    def test_home_page_use_template(self):
+    def test_use_view_template(self):
         list_ = List.objects.create()
         response = self.client.get(f'/lists/{list_.pk}/')
         self.assertTemplateUsed(response, 'view.html')
@@ -53,7 +53,8 @@ class ViewListTest(TestCase):
         self.assertNotContains(response, 'First other item')
         self.assertNotContains(response, 'Second other item')
 
-    def test_pass_list_instance(self):
+    def test_pass_correct_list_instance(self):
+        other_list = List.objects.create()
         list_ = List.objects.create()
         response = self.client.get(f'/lists/{list_.pk}/')
         self.assertEqual(response.context['list'], list_)
