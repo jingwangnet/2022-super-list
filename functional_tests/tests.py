@@ -2,11 +2,12 @@ from selenium import webdriver
 from selenium.webdriver.chrome.options import Options
 from selenium.webdriver.common.by import By
 from selenium.webdriver.common.keys import Keys
+from django.test import LiveServerTestCase
 import os
 import unittest
 import time
 
-class NewVisitorTest(unittest.TestCase):
+class NewVisitorTest(LiveServerTestCase):
     
     def setUp(self):
         if os.environ.get('HEADLESS', False):
@@ -30,7 +31,7 @@ class NewVisitorTest(unittest.TestCase):
         
 
     def test_start_a_list_and_retrieve_it_later(self):
-        self.browser.get('http://127.0.0.1:8000')
+        self.browser.get(self.live_server_url)
         self.assertIn('To-Do lists', self.browser.title)
         header = self.browser.find_element(By.TAG_NAME, 'h1').text
         self.assertIn('To-Do lists', header)
@@ -58,5 +59,3 @@ class NewVisitorTest(unittest.TestCase):
 
 
 
-if __name__ == '__main__':
-    unittest.main()
