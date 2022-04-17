@@ -4,6 +4,7 @@ from selenium.webdriver.common.by import By
 from selenium.webdriver.common.keys import Keys
 import os
 import unittest
+import time
 
 class NewVisitorTest(unittest.TestCase):
     
@@ -18,6 +19,15 @@ class NewVisitorTest(unittest.TestCase):
     def tearDown(self):
         self.browser.quit()
 
+    def check_text_in_table(self, text):
+        table = self.browser.find_element(By.ID, 'id_list_table')
+        rows = table.find_elements(By.TAG_NAME, 'tr')
+
+        self.assertIn(
+            text,
+            [row.text for row in rows]
+        )
+        
 
     def test_start_a_list_and_retrieve_it_later(self):
         self.browser.get('http://127.0.0.1:8000')
@@ -33,14 +43,18 @@ class NewVisitorTest(unittest.TestCase):
 
         inputbox.send_keys('Buy bread')
         inputbox.send_keys(Keys.ENTER)
+        time.sleep(1)
+        
+        self.check_text_in_table('1: Buy bread')
 
-        table = self.browser.find_element(By.ID, 'id_list_table')
-        rows = table.find_elements(By.TAG_NAME, 'tr')
 
-        self.assertIn(
-            '1: Buy bread',
-            [row.text for row in rows]
-        )
+        inputbox = self.browser.find_element(By.ID, 'id_new_item')
+        inputbox.send_keys('Eating bread for dinner')
+        inputbox.send_keys(Keys.ENTER)
+        time.sleep(1)
+
+        self.check_text_in_table('2: Eatting bread for dinner')
+        self.check_text_in_table('1: Buy bread')
 
 
 
