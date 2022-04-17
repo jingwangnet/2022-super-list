@@ -8,4 +8,6 @@ def home_page(request):
         item = Item.objects.create(text=request.POST['new_item'])
         return redirect('/')
 
-    return render(request, 'home.html')
+    items = Item.objects.all()
+    context = {'items': items}
+    return render(request, 'home.html', context)

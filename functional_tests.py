@@ -49,7 +49,7 @@ class NewVisitorTest(unittest.TestCase):
 
 
         inputbox = self.browser.find_element(By.ID, 'id_new_item')
-        inputbox.send_keys('Eating bread for dinner')
+        inputbox.send_keys('Eatting bread for dinner')
         inputbox.send_keys(Keys.ENTER)
         time.sleep(1)
 
