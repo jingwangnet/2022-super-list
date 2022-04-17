@@ -1,4 +1,4 @@
-from django.shortcuts import render
+from django.shortcuts import render, redirect
 from django.http import HttpResponse
 from lists.models import Item
 
@@ -6,11 +6,6 @@ from lists.models import Item
 def home_page(request):
     if request.method == 'POST':
         item = Item.objects.create(text=request.POST['new_item'])
-        new_item_text = item.text
-    else:
-        new_item_text = ''
+        return redirect('/')
 
-    context={
-        'new_item_text':  new_item_text
-    }
-    return render(request, 'home.html', context)
+    return render(request, 'home.html')
