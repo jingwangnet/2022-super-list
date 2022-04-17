@@ -1,5 +1,6 @@
 from django.test import TestCase
 from lists.views import home_page
+from lists.models import Item
 from django.http import HttpRequest
 from django.urls import resolve
 
@@ -17,3 +18,20 @@ class HomePageTest(TestCase):
         self.assertTemplateUsed(response, 'home.html')
    
     
+class ItemModelTest(TestCase):
+
+   def test_create_items_and_retrieve_it_later(self):
+       first_item = Item()
+       first_item.text = 'First item'
+       first_item.save()
+
+       second_item = Item()
+       second_item.text = 'Second item'
+       second_item.save()
+
+       self.assertEqual(2, Item.objects.count())
+       saved_first_item, saved_second_item = Item.objects.all()
+
+       self.assertEqual(saved_first_item.text, 'First item')
+       self.assertEqual(saved_second_item.text, 'Second item')
+       
