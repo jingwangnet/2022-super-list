@@ -1,6 +1,6 @@
 from django.test import TestCase
 from lists.views import home_page
-from lists.models import Item
+from lists.models import Item, List
 from django.http import HttpRequest
 from django.urls import resolve
 
@@ -38,27 +38,36 @@ class ViewListTest(TestCase):
         self.assertTemplateUsed(response, 'view.html')
 
     def test_render_all_items_in_template(self):
-        Item.objects.create(text="First item")
-        Item.objects.create(text="Second item")
+        list_ = List.objects.create()
+        Item.objects.create(list=list_, text="First item")
+        Item.objects.create(list=list_, text="Second item")
 
         response = self.client.get('/lists/the-only-url/')
         self.assertContains(response, 'First item')
         self.assertContains(response, 'Second item')
     
-class ItemModelTest(TestCase):
+class ListAndItemModelTest(TestCase):
 
    def test_create_items_and_retrieve_it_later(self):
+       list_ = List()
+       list_.save()
        first_item = Item()
        first_item.text = 'First item'
+       first_item.list = list_
        first_item.save()
 
        second_item = Item()
        second_item.text = 'Second item'
+       second_item.list = list_
        second_item.save()
 
        self.assertEqual(2, Item.objects.count())
-       saved_first_item, saved_second_item = Item.objects.all()
+       self.assertEqual(1, List.objects.count())
+       saved_list = List.objects.first()
+       saved_first_item, saved_second_item = saved_list.item_set.all() 
 
        self.assertEqual(saved_first_item.text, 'First item')
+       self.assertEqual(saved_first_item.list, list_)
        self.assertEqual(saved_second_item.text, 'Second item')
+       self.assertEqual(saved_second_item.list, list_)
        
