@@ -14,8 +14,17 @@ class HomePageTest(TestCase):
     def test_can_save_POST_request(self):
         response = self.client.post('/', data={'new_item': 'A new item'})
         html = response.content.decode()
+
+        self.assertEqual(1, Item.objects.count())
+        item = Item.objects.first()
+        self.assertEqual(item.text, 'A new item')
+
         self.assertIn('A new item', html)
         self.assertTemplateUsed(response, 'home.html')
+
+    def test_save_item_when_necessary(self):
+        response = self.client.get('/')
+        self.assertEqual(0, Item.objects.count())
    
     
 class ItemModelTest(TestCase):
