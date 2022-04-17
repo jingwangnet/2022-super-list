@@ -27,24 +27,31 @@ class NewListTest(TestCase):
     def test_redirect_after_post_request(self):
         response = self.client.post('/lists/new', data={'new_item': 'A new item'})
         html = response.content.decode()
+        list_ = List.objects.first()
 
         self.assertEqual(response.status_code, 302)
-        self.assertEqual(response['location'], '/lists/the-only-url/')
+        self.assertEqual(response['location'], f'/lists/{list_.pk}/')
 
 class ViewListTest(TestCase):
 
     def test_home_page_use_template(self):
-        response = self.client.get('/lists/the-only-url/')
+        list_ = List.objects.create()
+        response = self.client.get(f'/lists/{list_.pk}/')
         self.assertTemplateUsed(response, 'view.html')
 
-    def test_render_all_items_in_template(self):
+    def test_render_only_items_for_that_list_in_template(self):
+        other_list = List.objects.create()
+        Item.objects.create(list=other_list, text="First other item")
+        Item.objects.create(list=other_list, text="Second other item")
         list_ = List.objects.create()
         Item.objects.create(list=list_, text="First item")
         Item.objects.create(list=list_, text="Second item")
 
-        response = self.client.get('/lists/the-only-url/')
+        response = self.client.get(f'/lists/{list_.pk}/')
         self.assertContains(response, 'First item')
         self.assertContains(response, 'Second item')
+        self.assertNotContains(response, 'First other item')
+        self.assertNotContains(response, 'Second other item')
     
 class ListAndItemModelTest(TestCase):
 
