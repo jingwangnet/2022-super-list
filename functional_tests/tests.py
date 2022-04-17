@@ -2,10 +2,15 @@ from selenium import webdriver
 from selenium.webdriver.chrome.options import Options
 from selenium.webdriver.common.by import By
 from selenium.webdriver.common.keys import Keys
+from selenium.common.exceptions import WebDriverException
 from django.test import LiveServerTestCase
 import os
 import unittest
 import time
+
+
+MAX_TIME = 5
+
 
 class NewVisitorTest(LiveServerTestCase):
     
@@ -20,14 +25,22 @@ class NewVisitorTest(LiveServerTestCase):
     def tearDown(self):
         self.browser.quit()
 
-    def check_text_in_table(self, text):
-        table = self.browser.find_element(By.ID, 'id_list_table')
-        rows = table.find_elements(By.TAG_NAME, 'tr')
+    def wait_to_check_text_in_table(self, text):
+        START_TIME = time.time()
+        while True:
+            try:
+                table = self.browser.find_element(By.ID, 'id_list_table')
+                rows = table.find_elements(By.TAG_NAME, 'tr')
 
-        self.assertIn(
-            text,
-            [row.text for row in rows]
-        )
+                self.assertIn(
+                    text,
+                    [row.text for row in rows]
+                )
+                return 
+            except (AssertionError, WebDriverException) as e:
+                if time.time() - START_TIME > MAX_TIME:
+                    raise e
+                time.sleep(0.2)
         
 
     def test_start_a_list_and_retrieve_it_later(self):
@@ -44,18 +57,16 @@ class NewVisitorTest(LiveServerTestCase):
 
         inputbox.send_keys('Buy bread')
         inputbox.send_keys(Keys.ENTER)
-        time.sleep(1)
         
-        self.check_text_in_table('1: Buy bread')
+        self.wait_to_check_text_in_table('1: Buy bread')
 
 
         inputbox = self.browser.find_element(By.ID, 'id_new_item')
         inputbox.send_keys('Eatting bread for dinner')
         inputbox.send_keys(Keys.ENTER)
-        time.sleep(1)
 
-        self.check_text_in_table('2: Eatting bread for dinner')
-        self.check_text_in_table('1: Buy bread')
+        self.wait_to_check_text_in_table('2: Eatting bread for dinner')
+        self.wait_to_check_text_in_table('1: Buy bread')
 
 
 
