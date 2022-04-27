@@ -28,46 +28,57 @@ $primary: red;
 
 
 body {
+    display: flex;
+    height: 100vh;
+    width: 100%;
+    flex-direction: column;
     h1 {
         padding: 2rem;
         @extend .display-1;
         text-align: center;
     }
-    
-    form, table {
-        margin-top: 2rem;
-        padding: 1rem;
-        max-width: 600px;
-        display: block;
-        margin: auto;
-    }
+
+
 
     form { 
         text-align: center;
+        margin: 1rem;
         input {
-            font-size: 2rem;
+            width: 100%;
+            font-size: 1.25rem;
+            @extend .border;
             padding: 1rem;
+            @include media_breakpoint_up(md) {
+                max-width: 600px;
+                margin: auto;
+            }
         }
     }
 
+    table, tbody, tr, td {
+        display: block;
+    }
     table {
+        flex: 1 1 auto;
+        padding: 1rem;
         @extend .bg-secondary;
         @extend .bg-opacity-10;
-        tbody{
-           display: flex;
-           flex-direction: column; 
+        max-width:100%;
+        tbody {
+            max-width: 600px;
+            margin: auto;
+            tr {
+                font-size: 1.5rem;
 
-           tr {
-               padding: 1rem;
-               font-size: 1.5rem;
-               
-               &:nth-child(2n) {
-                   @extend .bg-primary;
-                   @extend .bg-opacity-10;
-               }
-           }
+                &:nth-child(2n) {
+                    @extend .bg-primary;
+                    @extend .bg-opacity-10;
+                }
+                td {
+                    padding: 1rem;
+                    word-break: break-all;
+                }
+            }
         }
-
     }
-
 }
