@@ -1,16 +1,3 @@
-<html>
-<head>
-  <meta charset="utf-8">
-  <meta name="viewport" content="width=width-device, initial=1.0">
-  <title>To-Do lists</title>
-<head>
-<body>
-  <h1>To-Do lists</h1>
-  <form method="POST" action="/lists/new">
-    <p style="text-align: center;">
-    <input id="id_new_item" name="new_item" placeholder="Enter a to-do item">
-    </p>
-    {% csrf_token %}
-  </form>
-</body>
-</html>
+{% extends 'base.html' %}
+{% block header %}To-Do lists{% endblock %}
+{% block action_url %}/lists/new{% endblock %}

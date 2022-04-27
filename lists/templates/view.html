@@ -1,15 +1,7 @@
-<html>
-<head>
-  <meta charset="utf-8">
-  <meta name="viewport" content="width=width-device, initial=1.0">
-  <title>To-Do lists</title>
-<head>
-<body>
-  <h1>To-Do lists</h1>
-  <form method="POST" action="/lists/{{ list.pk }}/add">
-    <input id="id_new_item" name="new_item" placeholder="Enter a to-do item">
-    {% csrf_token %}
-  </form>
+{% extends 'base.html' %}
+{% block header %}Your To-Do list{% endblock %}
+{% block action_url %}/lists/{{ list.pk }}/add{% endblock %}
+{% block content %}
   <table id="id_list_table">
      {% for item in list.item_set.all %}
      <tr>
@@ -17,5 +9,4 @@
      </tr>
      {% endfor %}
   </table>
-</body>
-</html>
+{% endblock %}
