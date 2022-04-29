@@ -57,6 +57,23 @@
             project_path: '{{ source_dir }}'
             virtualenv: '{{ virtualenv_dir }}'
 
+        - name: SASS compile CSS
+          block: 
+            - name: Npm install install dependce
+              community.general.npm:
+                path: '{{ source_dir }}/lists/static/'
+
+
+            - name: Npm install scss
+              community.general.npm:
+                name: sass
+                global: yes
+              become: True
+
+            - name: compile CSS
+              command: 'sass {{ scss_dir }}:{{ css_dir }}'
+
+
         - name: Django collect staticfiels
           community.general.django_manage:
             command: collectstatic
@@ -114,7 +131,9 @@
       register: result
 
     - name: show the result
-      debug: var=result
+      debug: 
+        msg: '{{  result.url }} {{ result.status }} '
+
 
 
 
