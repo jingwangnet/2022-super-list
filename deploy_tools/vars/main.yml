@@ -1,0 +1,27 @@
+---
+project_name: 'super_lists'
+repo_url: https://github.com/jingwangnet/2022-super-list.git
+
+
+site_dir: '{{ ansible_facts.user_dir }}/site'
+host_dir: '{{ site_dir }}/{{ inventory_hostname }}'
+source_dir: '{{ host_dir }}/source'
+database_dir: '{{ host_dir }}/database'
+static_dir: '{{ host_dir }}/static'
+virtualenv_dir: '{{ host_dir }}/virtualenv'
+
+settings_file: '{{ source_dir }}/{{ project_name }}/settings.py'
+
+apps: 
+  - python3-pip
+  - python3-virtualenv
+  - git 
+  - nginx 
+
+dirs: 
+  - '{{ site_dir }}'
+  - '{{ host_dir }}'
+  - '{{ source_dir }}'
+  - '{{ database_dir }}'
+  - '{{ static_dir }}'
+  - '{{ virtualenv_dir }}'
