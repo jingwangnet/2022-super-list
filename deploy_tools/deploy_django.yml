@@ -49,6 +49,19 @@
             regex: '^SECRET_KEY = (.*)$'
             line: "SECRET_KEY = '{{ SECRET_KEY }}'"
 
+        - name: Update database path
+          lineinfile: 
+            path: '{{ settings_file }}'
+            regex: "^'NAME': BASE_DIR/ 'db.sqlite3'"
+            line: "^'NAME': BASE_DIR/'..'/'static'/'db.sqlite3'"
+
+        - name: Add STATIC_ROOT path
+          lineinfile: 
+            path: '{{ settings_file }}'
+            insertafter: "^STATIC_URL = '/static/'" 
+            line: "STATIC_ROOT = BASE_DIR /'..'/'static'"
+
+
     - name: Django intial database and sync staticfiels
       block: 
         - name: Django initial database
