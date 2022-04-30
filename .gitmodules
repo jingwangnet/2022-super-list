@@ -1,3 +1,0 @@
-[submodule "deploy_django"]
-	path = deploy_django
-	url = https://github.com/jingwangnet/deploy_django.git
