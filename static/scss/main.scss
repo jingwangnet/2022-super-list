@@ -1,0 +1,84 @@
+// Custom.scss
+// Option B: Include parts of Bootstrap
+
+// 1. Include functions first (so you can manipulate colors, SVGs, calc, etc)
+@import "../node_modules/bootstrap/scss/functions";
+
+// 2. Include any default variable overrides here
+$primary: red;
+
+// 3. Include remainder of required Bootstrap stylesheets
+@import "../node_modules/bootstrap/scss/variables";
+@import "../node_modules/bootstrap/scss/mixins";
+@import "../node_modules/bootstrap/scss/root";
+
+// 4. Include any optional Bootstrap CSS as needed
+@import "../node_modules/bootstrap/scss/utilities";
+@import "../node_modules/bootstrap/scss/reboot";
+@import "../node_modules/bootstrap/scss/type";
+@import "../node_modules/bootstrap/scss/images";
+@import "../node_modules/bootstrap/scss/containers";
+@import "../node_modules/bootstrap/scss/grid";
+@import "../node_modules/bootstrap/scss/helpers";
+
+// 5. Optionally include utilities API last to generate classes based on the Sass map in `_utilities.scss`
+@import "../node_modules/bootstrap/scss/utilities/api";
+
+// 6. Add additional custom code here
+
+
+body {
+    display: flex;
+    height: 100vh;
+    width: 100%;
+    flex-direction: column;
+    h1 {
+        padding: 2rem;
+        @extend .display-1;
+        text-align: center;
+    }
+
+
+
+    form { 
+        text-align: center;
+        margin: 1rem;
+        input {
+            width: 100%;
+            font-size: 1.25rem;
+            @extend .border;
+            padding: 1rem;
+            @include media_breakpoint_up(md) {
+                max-width: 600px;
+                margin: auto;
+            }
+        }
+    }
+
+    table, tbody, tr, td {
+        display: block;
+    }
+    table {
+        flex: 1 1 auto;
+        padding: 1rem;
+        @extend .bg-secondary;
+        @extend .bg-opacity-10;
+        max-width:100%;
+        tbody {
+            max-width: 600px;
+            margin: auto;
+            tr {
+                font-size: 1.5rem;
+
+                &:nth-child(2n) {
+                    @extend .bg-primary;
+                    @extend .bg-opacity-10;
+                }
+                td {
+                    padding: 1rem;
+                    word-break: break-all;
+                }
+            }
+        }
+    }
+}
