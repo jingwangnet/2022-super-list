@@ -52,7 +52,7 @@
         - name: Update database path
           lineinfile: 
             path: '{{ settings_file }}'
-            regex: "^'NAME': BASE_DIR / 'db.sqlite3'"
+            regex: "'NAME': BASE_DIR / 'db.sqlite3',"
             line: "'NAME': BASE_DIR / '..' / 'static' / 'db.sqlite3'"
 
         - name: Add STATIC_ROOT path
