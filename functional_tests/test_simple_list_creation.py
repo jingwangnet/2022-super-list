@@ -1,51 +1,9 @@
-from selenium import webdriver
-from selenium.webdriver.chrome.options import Options
 from selenium.webdriver.common.by import By
 from selenium.webdriver.common.keys import Keys
-from selenium.common.exceptions import WebDriverException
-from django.test import LiveServerTestCase
-from django.contrib.staticfiles.testing import StaticLiveServerTestCase
-import os
-import unittest
-import time
+from .base import FunctionalTest
 
 
-MAX_TIME = 5
-
-
-class NewVisitorTest(StaticLiveServerTestCase):
-    
-    def setUp(self):
-        if STAGING_SERVER := os.environ.get('STAGING_SERVER'):
-            self.live_server_url = 'http://' + STAGING_SERVER
-
-        if os.environ.get('HEADLESS', False):
-            options = Options()
-            options.headless = True
-            self.browser = webdriver.Chrome(options=options)
-        else:
-            self.browser = webdriver.Chrome()
-
-    def tearDown(self):
-        self.browser.quit()
-
-    def wait_to_check_text_in_table(self, text):
-        START_TIME = time.time()
-        while True:
-            try:
-                table = self.browser.find_element(By.ID, 'id_list_table')
-                rows = table.find_elements(By.TAG_NAME, 'tr')
-
-                self.assertIn(
-                    text,
-                    [row.text for row in rows]
-                )
-                return 
-            except (AssertionError, WebDriverException) as e:
-                if time.time() - START_TIME > MAX_TIME:
-                    raise e
-                time.sleep(0.2)
-        
+class NewVisitorTest(FunctionalTest):
 
     def test_start_a_list_and_retrieve_it_later(self):
         self.browser.get(self.live_server_url)
@@ -104,25 +62,3 @@ class NewVisitorTest(StaticLiveServerTestCase):
         self.assertNotEqual(JOHN_URL, EDITH_URL)
         
 
-    def test_layout_and_styling(self):
-        self.browser.get(self.live_server_url)
-        self.browser.set_window_size(1024, 768)
-
-        inputbox = self.browser.find_element(By.ID, 'id_new_item')
-        self.assertAlmostEqual(
-            inputbox.location['x'] + inputbox.size['width'] / 2,
-            512,
-            delta=30
-        )
-
-        inputbox.send_keys('Buy milk')
-        inputbox.send_keys(Keys.ENTER)
-
-        self.wait_to_check_text_in_table('1: Buy milk')
-
-        inputbox = self.browser.find_element(By.ID, 'id_new_item')
-        self.assertAlmostEqual(
-            inputbox.location['x'] + inputbox.size['width'] / 2,
-            512,
-            delta=30
-        )
