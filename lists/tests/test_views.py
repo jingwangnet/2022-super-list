@@ -11,9 +11,6 @@ class HomePageTest(TestCase):
         response = self.client.get('/')
         self.assertTemplateUsed(response, 'home.html')
 
-    def test_save_item_when_necessary(self):
-        response = self.client.get('/')
-        self.assertEqual(0, Item.objects.count())
    
 class NewListTest(TestCase):
 
