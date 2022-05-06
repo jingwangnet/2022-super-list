@@ -9,10 +9,12 @@ def home_page(request):
 
 def new_list(request):
     list_ = List.objects.create()
-    item = Item.objects.create(list=list_, text=request.POST['new_item'])
+    item = Item(list=list_, text=request.POST['new_item'])
     try:
         item.full_clean()
+        item.save()
     except ValidationError:
+        list_.delete()
         error = "You can't have empty item"
         return render(request, 'home.html', {'error': error})
     return redirect(f'/lists/{list_.pk}/')

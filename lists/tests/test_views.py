@@ -35,9 +35,14 @@ class NewListTest(TestCase):
         self.assertEqual(response.status_code, 200)
         self.assertTemplateUsed(response, 'home.html')
         expected_error = "You can't have empty item"
-        html = response.content.decode()
-        self.assertIn(expected_error, html)
-        #self.assertContains(response, expected_error)
+        self.assertContains(response, expected_error)
+
+    def test_invliad_list_items_arent_saved(self):
+        response = self.client.post('/lists/new', data={'new_item': ''})
+
+        self.assertEqual(Item.objects.count(), 0)
+        self.assertEqual(List.objects.count(), 0)
+
 
 class ViewListTest(TestCase):
 
