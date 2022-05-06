@@ -53,6 +53,10 @@ body {
                 margin: auto;
             }
         }
+        p.has_error {
+            padding: 1rem;
+            color: $red;
+        }
     }
 
     table, tbody, tr, td {
