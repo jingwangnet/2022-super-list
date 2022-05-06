@@ -86,6 +86,15 @@ class ViewListTest(TestCase):
 
         self.assertEqual(response.status_code, 302)
         self.assertEqual(response['location'], f'/lists/{list_.pk}/')
+
+    def test_validtion_error_end_up_on_list_page(self):
+        list_ = List.objects.create()
+        response = self.client.post(f'/lists/{list_.pk}/', data={'new_item': ''})
+
+        self.assertEqual(response.status_code, 200)
+        self.assertTemplateUsed(response, 'view.html')
+        expected_error = "You can't have empty item"
+        self.assertContains(response, expected_error)
     
 
 
