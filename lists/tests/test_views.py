@@ -34,7 +34,7 @@ class NewListTest(TestCase):
 
         self.assertEqual(response.status_code, 200)
         self.assertTemplateUsed(response, 'home.html')
-        expected_error = "You can't have empty item"
+        expected_error = "You can't have an empty item"
         self.assertContains(response, expected_error)
 
     def test_invliad_list_items_arent_saved(self):
@@ -93,7 +93,7 @@ class ViewListTest(TestCase):
 
         self.assertEqual(response.status_code, 200)
         self.assertTemplateUsed(response, 'view.html')
-        expected_error = "You can't have empty item"
+        expected_error = "You can't have an empty item"
         self.assertContains(response, expected_error)
     
 

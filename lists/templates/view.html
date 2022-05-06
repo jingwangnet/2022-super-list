@@ -1,6 +1,6 @@
 {% extends 'base.html' %}
 {% block header %}Your To-Do list{% endblock %}
-{% block action_url %}/lists/{{ list.pk }}{% endblock %}
+{% block action_url %}{% url 'lists:view' list.pk %}{% endblock %}
 {% block content %}
   <table id="id_list_table">
      {% for item in list.item_set.all %}
