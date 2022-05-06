@@ -16,6 +16,11 @@
     <form method="POST" action="{% block action_url %}{% endblock %}">
       <input id="id_new_item" name="new_item" placeholder="Enter a to-do item">
       {% csrf_token %}
+      {% if error %}
+      <div>
+        <p class="has_error">You can't have empty item</p>
+      </div>
+      {% endif %}
     </form>
     {% block content %}
     {% endblock %}

@@ -29,6 +29,16 @@ class NewListTest(TestCase):
         self.assertEqual(response.status_code, 302)
         self.assertEqual(response['location'], f'/lists/{list_.pk}/')
 
+    def test_validation_error_are_sent_back_home_page_template(self):
+        response = self.client.post('/lists/new', data={'new_item': ''})
+
+        self.assertEqual(response.status_code, 200)
+        self.assertTemplateUsed(response, 'home.html')
+        expected_error = "You can't have empty item"
+        html = response.content.decode()
+        self.assertIn(expected_error, html)
+        #self.assertContains(response, expected_error)
+
 class ViewListTest(TestCase):
 
     def test_use_view_template(self):
