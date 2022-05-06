@@ -15,7 +15,7 @@ def new_list(request):
         item.save()
     except ValidationError:
         list_.delete()
-        error = "You can't have empty item"
+        error = "You can't have an empty item"
         return render(request, 'home.html', {'error': error})
     return redirect(list_)
 
@@ -31,7 +31,7 @@ def view_list(request, pk):
             item.save()
             return redirect(list_)
         except ValidationError:
-            error = "You can't have empty item"
+            error = "You can't have an empty item"
 
     context = {'list': list_, 'error': error}
     return render(request, 'view.html', context)

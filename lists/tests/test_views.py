@@ -3,6 +3,7 @@ from lists.views import home_page
 from lists.models import Item, List
 from django.http import HttpRequest
 from django.urls import resolve
+from django.utils.html import escape
 
 # Create your tests here.
 class HomePageTest(TestCase):
@@ -34,7 +35,7 @@ class NewListTest(TestCase):
 
         self.assertEqual(response.status_code, 200)
         self.assertTemplateUsed(response, 'home.html')
-        expected_error = "You can't have an empty item"
+        expected_error = escape("You can't have an empty item")
         self.assertContains(response, expected_error)
 
     def test_invliad_list_items_arent_saved(self):
@@ -93,7 +94,7 @@ class ViewListTest(TestCase):
 
         self.assertEqual(response.status_code, 200)
         self.assertTemplateUsed(response, 'view.html')
-        expected_error = "You can't have an empty item"
+        expected_error = escape("You can't have an empty item")
         self.assertContains(response, expected_error)
     
 
