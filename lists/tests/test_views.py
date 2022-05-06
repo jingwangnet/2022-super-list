@@ -71,11 +71,9 @@ class ViewListTest(TestCase):
         response = self.client.get(f'/lists/{list_.pk}/')
         self.assertEqual(response.context['list'], list_)
 
-class AddItemTest(TestCase):
-
     def test_can_save_POST_request_to_an_existing_list(self):
         list_ = List.objects.create()
-        self.client.post(f'/lists/{list_.pk}/add', data={'new_item': 'A new item'})
+        self.client.post(f'/lists/{list_.pk}/', data={'new_item': 'A new item'})
 
         self.assertEqual(1, Item.objects.count())
         item = Item.objects.first()
@@ -83,9 +81,11 @@ class AddItemTest(TestCase):
 
     def test_redirect_after_post_request(self):
         list_ = List.objects.create()
-        response = self.client.post(f'/lists/{list_.pk}/add', data={'new_item': 'A new item'})
+        response = self.client.post(f'/lists/{list_.pk}/', data={'new_item': 'A new item'})
         html = response.content.decode()
 
         self.assertEqual(response.status_code, 302)
         self.assertEqual(response['location'], f'/lists/{list_.pk}/')
     
+
+
