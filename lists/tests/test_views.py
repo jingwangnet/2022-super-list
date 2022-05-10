@@ -87,6 +87,11 @@ class ViewListTest(TestCase):
         response = self.client.get(f'/lists/{list_.pk}/')
         self.assertEqual(response.context['list'], list_)
 
+    def test_view_list_use_form(self):
+        list_ = List.objects.create()
+        response = self.client.get(f'/lists/{list_.pk}/')
+        self.assertIsInstance(response.context['form'], ItemForm)
+
     def test_can_save_POST_request_to_an_existing_list(self):
         list_ = List.objects.create()
         self.client.post(f'/lists/{list_.pk}/', data={'text': 'A new item'})
@@ -103,14 +108,36 @@ class ViewListTest(TestCase):
         self.assertEqual(response.status_code, 302)
         self.assertEqual(response['location'], f'/lists/{list_.pk}/')
 
-    def test_validtion_error_end_up_on_list_page(self):
+    def post_invalid_request(self):
         list_ = List.objects.create()
-        response = self.client.post(f'/lists/{list_.pk}/', data={'text': ''})
+        return self.client.post(f'/lists/{list_.pk}/', data={'text': ''})
 
-        self.assertEqual(response.status_code, 200)
+    def test_invalid_post_nothting_to_db(self):
+        response = self.post_invalid_request()
+
+        self.assertEqual(0, Item.objects.count())
+
+    def test_validation_error_use_view_template(self):
+        response = self.post_invalid_request()
+
         self.assertTemplateUsed(response, 'view.html')
+
+    def test_validation_error_are_show_in_template(self):
+        response = self.post_invalid_request()
+
         expected_error = escape(EMPTY_ITEM_ERROR)
         self.assertContains(response, expected_error)
+
+    def test_validation_error_passes_form_to_tempate(self):
+        response = self.post_invalid_request()
+
+        self.assertIsInstance(response.context['form'], ItemForm)
+
+
+
+  
+
+
     
 
 
