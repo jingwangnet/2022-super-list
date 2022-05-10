@@ -1,6 +1,7 @@
 from django.test import TestCase
 from django import forms
 from lists.forms import ItemForm, EMPTY_ITEM_ERROR
+from lists.models import Item, List
 
 
 class ItemFormTest(TestCase):
@@ -17,3 +18,13 @@ class ItemFormTest(TestCase):
             form.errors['text'],
             [EMPTY_ITEM_ERROR]
         )
+
+    def test_form_save_handel_saving_to_list(self):
+        list_ = List.objects.create()
+        form = ItemForm(data={'text': 'A item'})
+        form.save(for_list=list_)
+
+        self.assertEqual(1, Item.objects.count())
+        item = Item.objects.first()
+        self.assertEqual(item.text, 'A item')
+        self.assertEqual(item.list, list_)
