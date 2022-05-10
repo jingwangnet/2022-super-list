@@ -36,13 +36,22 @@ class NewListTest(TestCase):
         self.assertEqual(response.status_code, 302)
         self.assertEqual(response['location'], f'/lists/{list_.pk}/')
 
-    def test_validation_error_are_sent_back_home_page_template(self):
+    def test_validation_error_use_view_template(self):
         response = self.client.post('/lists/new', data={'text': ''})
 
         self.assertEqual(response.status_code, 200)
         self.assertTemplateUsed(response, 'home.html')
+
+    def test_validation_error_are_shown_in_template(self):
+        response = self.client.post('/lists/new', data={'text': ''})
+
         expected_error = escape(EMPTY_ITEM_ERROR)
         self.assertContains(response, expected_error)
+
+    def test_validation_error_passes_form_to_template(self):
+        response = self.client.post('/lists/new', data={'text': ''})
+        
+        self.assertIsInstance(response.context['form'], ItemForm)
 
     def test_invliad_list_items_arent_saved(self):
         response = self.client.post('/lists/new', data={'text': ''})

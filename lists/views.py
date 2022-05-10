@@ -11,16 +11,13 @@ def home_page(request):
     return render(request, 'home.html', context)
 
 def new_list(request):
-    list_ = List.objects.create()
-    item = Item(list=list_, text=request.POST['text'])
-    try:
-        item.full_clean()
-        item.save()
-    except ValidationError:
-        list_.delete()
-        error = "You can't have an empty item"
-        return render(request, 'home.html', {'error': error})
-    return redirect(list_)
+    form = ItemForm(request.POST)
+    if form.is_valid():
+        list_ = List.objects.create()
+        item = Item.objects.create(list=list_, text=request.POST['text'])
+        return redirect(list_)
+    else:
+        return render(request, 'home.html', {'form': form})
 
 def view_list(request, pk):
     list_ = List.objects.get(pk=pk)
