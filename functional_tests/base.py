@@ -55,3 +55,5 @@ class FunctionalTest(StaticLiveServerTestCase):
                     raise e
                 time.sleep(0.2)
 
+    def get_item_input_box(self):
+        return self.browser.find_element(By.ID, 'id_text')

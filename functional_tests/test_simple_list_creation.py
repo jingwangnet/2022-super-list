@@ -11,7 +11,7 @@ class NewVisitorTest(FunctionalTest):
         header = self.browser.find_element(By.TAG_NAME, 'h1').text
         self.assertIn('To-Do lists', header)
 
-        inputbox = self.browser.find_element(By.ID, 'id_new_item')
+        inputbox = self.get_item_input_box()
         self.assertEqual(
             inputbox.get_attribute('placeholder'),
             'Enter a to-do item'
@@ -23,7 +23,7 @@ class NewVisitorTest(FunctionalTest):
         self.wait_to_check_text_in_table('1: Buy bread')
 
 
-        inputbox = self.browser.find_element(By.ID, 'id_new_item')
+        inputbox = self.get_item_input_box()
         inputbox.send_keys('Eatting bread for dinner')
         inputbox.send_keys(Keys.ENTER)
 
@@ -33,7 +33,7 @@ class NewVisitorTest(FunctionalTest):
     def test_start_multiple_lists_on_diffrent_urls(self):
         self.browser.get(self.live_server_url)
 
-        inputbox = self.browser.find_element(By.ID, 'id_new_item')
+        inputbox = self.get_item_input_box()
         inputbox.send_keys('Buy bread')
         inputbox.send_keys(Keys.ENTER)
 
@@ -49,7 +49,7 @@ class NewVisitorTest(FunctionalTest):
         html = self.browser.find_element(By.TAG_NAME, 'body').text
         self.assertNotIn('Buy bread', html)
         
-        inputbox = self.browser.find_element(By.ID, 'id_new_item')
+        inputbox = self.get_item_input_box()
         inputbox.send_keys('Go shopping')
         inputbox.send_keys(Keys.ENTER)
         

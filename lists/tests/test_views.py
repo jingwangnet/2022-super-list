@@ -4,7 +4,7 @@ from django.urls import resolve
 from django.utils.html import escape
 from lists.views import home_page
 from lists.models import Item, List
-from lists.forms import ItemForm
+from lists.forms import ItemForm, EMPTY_ITEM_ERROR
 
 # Create your tests here.
 class HomePageTest(TestCase):
@@ -22,14 +22,14 @@ class HomePageTest(TestCase):
 class NewListTest(TestCase):
 
     def test_can_save_POST_request(self):
-        self.client.post('/lists/new', data={'new_item': 'A new item'})
+        self.client.post('/lists/new', data={'text': 'A new item'})
 
         self.assertEqual(1, Item.objects.count())
         item = Item.objects.first()
         self.assertEqual(item.text, 'A new item')
 
     def test_redirect_after_post_request(self):
-        response = self.client.post('/lists/new', data={'new_item': 'A new item'})
+        response = self.client.post('/lists/new', data={'text': 'A new item'})
         html = response.content.decode()
         list_ = List.objects.first()
 
@@ -37,15 +37,15 @@ class NewListTest(TestCase):
         self.assertEqual(response['location'], f'/lists/{list_.pk}/')
 
     def test_validation_error_are_sent_back_home_page_template(self):
-        response = self.client.post('/lists/new', data={'new_item': ''})
+        response = self.client.post('/lists/new', data={'text': ''})
 
         self.assertEqual(response.status_code, 200)
         self.assertTemplateUsed(response, 'home.html')
-        expected_error = escape("You can't have an empty item")
+        expected_error = escape(EMPTY_ITEM_ERROR)
         self.assertContains(response, expected_error)
 
     def test_invliad_list_items_arent_saved(self):
-        response = self.client.post('/lists/new', data={'new_item': ''})
+        response = self.client.post('/lists/new', data={'text': ''})
 
         self.assertEqual(Item.objects.count(), 0)
         self.assertEqual(List.objects.count(), 0)
@@ -80,7 +80,7 @@ class ViewListTest(TestCase):
 
     def test_can_save_POST_request_to_an_existing_list(self):
         list_ = List.objects.create()
-        self.client.post(f'/lists/{list_.pk}/', data={'new_item': 'A new item'})
+        self.client.post(f'/lists/{list_.pk}/', data={'text': 'A new item'})
 
         self.assertEqual(1, Item.objects.count())
         item = Item.objects.first()
@@ -88,7 +88,7 @@ class ViewListTest(TestCase):
 
     def test_redirect_after_post_request(self):
         list_ = List.objects.create()
-        response = self.client.post(f'/lists/{list_.pk}/', data={'new_item': 'A new item'})
+        response = self.client.post(f'/lists/{list_.pk}/', data={'text': 'A new item'})
         html = response.content.decode()
 
         self.assertEqual(response.status_code, 302)
@@ -96,11 +96,11 @@ class ViewListTest(TestCase):
 
     def test_validtion_error_end_up_on_list_page(self):
         list_ = List.objects.create()
-        response = self.client.post(f'/lists/{list_.pk}/', data={'new_item': ''})
+        response = self.client.post(f'/lists/{list_.pk}/', data={'text': ''})
 
         self.assertEqual(response.status_code, 200)
         self.assertTemplateUsed(response, 'view.html')
-        expected_error = escape("You can't have an empty item")
+        expected_error = escape(EMPTY_ITEM_ERROR)
         self.assertContains(response, expected_error)
     
 

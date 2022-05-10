@@ -9,7 +9,7 @@ class LayoutAndStyingTest(FunctionalTest):
         self.browser.get(self.live_server_url)
         self.browser.set_window_size(1024, 768)
 
-        inputbox = self.browser.find_element(By.ID, 'id_new_item')
+        inputbox = self.get_item_input_box()
         self.assertAlmostEqual(
             inputbox.location['x'] + inputbox.size['width'] / 2,
             512,
@@ -21,7 +21,7 @@ class LayoutAndStyingTest(FunctionalTest):
 
         self.wait_to_check_text_in_table('1: Buy milk')
 
-        inputbox = self.browser.find_element(By.ID, 'id_new_item')
+        inputbox = self.get_item_input_box()
         self.assertAlmostEqual(
             inputbox.location['x'] + inputbox.size['width'] / 2,
             512,
