@@ -3,30 +3,18 @@ from django.core.exceptions import ValidationError
 from lists.models import List, Item
 
 
-class ListAndItemModelTest(TestCase):
+class ItemModelTest(TestCase):
 
-    def test_create_items_and_retrieve_it_later(self):
-        list_ = List()
-        list_.save()
-        first_item = Item()
-        first_item.text = 'First item'
-        first_item.list = list_
-        first_item.save()
+    def test_value_of_default_item(self):
+        list_ = List.objects.create()
+        item = Item.objects.create(list=list_)
+        self.assertEqual(item.text, '')
 
-        second_item = Item()
-        second_item.text = 'Second item'
-        second_item.list = list_
-        second_item.save()
+    def test_items_relate_list(self):
+        list_ = List.objects.create()
+        item = Item.objects.create(list=list_)
 
-        self.assertEqual(2, Item.objects.count())
-        self.assertEqual(1, List.objects.count())
-        saved_list = List.objects.first()
-        saved_first_item, saved_second_item = saved_list.item_set.all() 
-
-        self.assertEqual(saved_first_item.text, 'First item')
-        self.assertEqual(saved_first_item.list, list_)
-        self.assertEqual(saved_second_item.text, 'Second item')
-        self.assertEqual(saved_second_item.list, list_)
+        self.assertIn(item, list_.item_set.all())
 
 
     def test_cannot_save_empty_item(self):
@@ -51,12 +39,33 @@ class ListAndItemModelTest(TestCase):
 
         item.full_clean() ## Should not raise errors
 
+    def test_odering(self):
+        list_ = List.objects.create()
+        item1 = Item.objects.create(text='First item', list=list_)
+        item2 = Item.objects.create(text='Second item', list=list_)
+        item3 = Item.objects.create(text='Third item', list=list_)
+
+        self.assertEqual(
+            list(list_.item_set.all()),
+            [item1, item2, item3]
+        )
+
+    def test_str(self):
+        list_ = List.objects.create()
+        item = Item.objects.create(text='A item', list=list_)
+        self.assertEqual(str(item), 'A item')
+        
+
+class ListModelTest(TestCase):
+
     def test_get_absolute_url(self):
         list_ = List.objects.create()
         self.assertEqual(
             list_.get_absolute_url(),
             f'/lists/{list_.pk}/'
         )
+
+
 
 
 
