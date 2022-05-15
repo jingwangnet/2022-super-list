@@ -17,8 +17,8 @@
       {{ form.text }}
       {% csrf_token %}
       {% if form.errors %}
-      <div>
-        <p class="has_error">{{ form.errors.text }}</p>
+      <div class="has_error">
+        {{ form.errors.text }}
       </div>
       {% endif %}
     </form>

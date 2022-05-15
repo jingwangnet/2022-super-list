@@ -2,6 +2,7 @@ from django import forms
 from lists.models import Item
 
 EMPTY_ITEM_ERROR = "You can't have an empty item"
+DUPLICATE_ITEM_ERROR = "You've alredy added this item"
 
 class ItemForm(forms.models.ModelForm):
 
