@@ -4,7 +4,11 @@ from django.urls import resolve
 from django.utils.html import escape
 from lists.views import home_page
 from lists.models import Item, List
-from lists.forms import ItemForm, EMPTY_ITEM_ERROR
+from lists.forms import (
+    ItemForm, EMPTY_ITEM_ERROR, 
+    DUPLICATE_ITEM_ERROR
+)
+import unittest
 
 # Create your tests here.
 class HomePageTest(TestCase):
@@ -132,6 +136,17 @@ class ViewListTest(TestCase):
         response = self.post_invalid_request()
 
         self.assertIsInstance(response.context['form'], ItemForm)
+
+    @unittest.skip
+    def test_duplicate_errors_end_up_on_template(self):
+        list_ = List.objects.create()
+        Item.objects.create(text='bla', list=list_)
+        response = self.client.post(f'/lists/{list_.pk}/', data={'text': 'bla'})
+
+        self.assertEqual('200', response.status_code)
+        self.assertTemplateUsed(response, 'view.html')
+        self.assertContains(response, DUPLICATE_ITEM_ERROR)
+        self.assertEqual(1, Item.objects.count())
 
 
 
