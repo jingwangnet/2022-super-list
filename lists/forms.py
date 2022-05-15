@@ -38,3 +38,6 @@ class ExistingListItemForm(ItemForm):
             self.instance.validate_unique()
         except ValidationError:
             self.add_error('text', DUPLICATE_ITEM_ERROR)
+
+    def save(self, *args, **kwargs):
+        return super(forms.models.ModelForm, self).save()
