@@ -12,18 +12,33 @@
     <title>To-Do lists</title>
   </head>
   <body>
-    <h1>{% block header %}{% endblock %}</h1>
-    <form method="POST" action="{% block action_url %}{% endblock %}">
-      {{ form.text }}
-      {% csrf_token %}
-      {% if form.errors %}
-      <div class="has_error">
-        {{ form.errors.text }}
+
+    <header>
+      <div class="logo">
+        <a href="{% url 'home' %}">Superlists</a>
       </div>
-      {% endif %}
-    </form>
-    {% block content %}
-    {% endblock %}
+      <nav>
+        <form method="POST" action="#">
+          <input class="form-control" type="text" name="email" placeholder="Enter an email for login">
+          {% csrf_token %}
+        </form>
+      </nav>
+    </header>
+  
+    <main>
+      <h1>{% block header %}{% endblock %}</h1>
+      <form method="POST" action="{% block action_url %}{% endblock %}">
+        {{ form.text }}
+        {% csrf_token %}
+        {% if form.errors %}
+        <div class="has_error">
+          {{ form.errors.text }}
+        </div>
+        {% endif %}
+      </form>
+      {% block content %}
+      {% endblock %}
+    </main>
 
     <!-- Option 1: Bootstrap Bundle with Popper -->
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-ka7Sk0Gln4gmtz2MlQnikT1wXgYsOg+OMhuP+IlRH9sENBO0LRn5q+8nbTov4+1p" crossorigin="anonymous"></script>
