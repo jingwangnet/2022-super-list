@@ -33,7 +33,7 @@
     {% if messages %}
     <div class="message-container">
       {% for message in messages %}
-        {% if message.level_tag == 'succes' %}
+        {% if message.level_tag == 'success' %}
         <div class="alert alert-success">{{ message }}</div>
         {% else %}
         <div class="alert alert-warning">{{ message }}</div>

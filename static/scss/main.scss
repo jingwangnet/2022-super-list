@@ -52,6 +52,13 @@ body {
             padding: 0 1rem;
             flex: 1 1 auto;
             display: flex;
+            flex-flow: row wrap;
+            gap: 0 1rem;
+            justify-content: flex-end;
+            p {
+                text-align: right; 
+                margin: 0;
+            }
             form {
                 margin-left: auto;
                 input {
@@ -59,6 +66,25 @@ body {
                     width: 40vw;
                     max-width: 200px;
                 }
+            }
+        }
+    }
+
+    div.message-container {
+        @include media_breakpoint_up(lg) {
+            @include make-container(200px);
+        }
+        .alert {
+            @extend .border;
+            margin: 1rem;
+            padding: 0.5rem;
+
+            &.alert-warning {
+                @extend .text-warning;
+            }
+
+            &.alert-success {
+                @extend .text-success;
             }
         }
     }
