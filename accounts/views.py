@@ -18,3 +18,6 @@ def send_login_email(request):
     )
     return redirect('/')
 
+def login(requet):
+    return redirect('/')
+
