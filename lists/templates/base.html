@@ -17,11 +17,16 @@
       <div class="logo">
         <a href="{% url 'home' %}">Superlists</a>
       </div>
-      <nav>
+      <nav class="navbar">
+        {% if user.email %}
+           <p>Logged in as {{ user.email }}</p>
+           <p><a href="#">Log out</a></p>
+        {% else %}
         <form method="POST" action="{% url 'accounts:send' %}">
           <input class="form-control" type="text" name="email" placeholder="Enter an email for login">
           {% csrf_token %}
         </form>
+        {% endif %}
       </nav>
     </header>
 
