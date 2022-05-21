@@ -41,9 +41,9 @@ class ItemModelTest(TestCase):
 
     def test_odering(self):
         list_ = List.objects.create()
-        item1 = Item.objects.create(text='First item', list=list_)
-        item2 = Item.objects.create(text='Second item', list=list_)
-        item3 = Item.objects.create(text='Third item', list=list_)
+        item1 = Item.objects.create(text='1', list=list_)
+        item2 = Item.objects.create(text='two', list=list_)
+        item3 = Item.objects.create(text='3', list=list_)
 
         self.assertEqual(
             list(list_.item_set.all()),

@@ -13,6 +13,7 @@ class Item(models.Model):
     list = models.ForeignKey(List, on_delete=models.CASCADE)
 
     class Meta:
+        ordering = ('pk',)
         unique_together = ('list', 'text')
 
     def __str__(self):
