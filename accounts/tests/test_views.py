@@ -49,18 +49,35 @@ class SendLoginEmailViewTest(TestCase):
         self.assertEqual(message.tags, 'success')
 
 
+@patch('accounts.views.auth')
 class LoginViewTest(TestCase):
 
-    def test_redirects_to_homepage(self):
-        response = self.client.get('/accounts/login?=abcd123')
+    def get_token_from_login(self):
+        return self.client.get('/accounts/login?token=abcd123')
+
+    def test_redirects_to_homepage(self, mock_auth):
+        response = self.get_token_from_login()
 
         self.assertRedirects(response, '/')
 
-    @patch('accounts.views.auth')
     def test_calls_authenticate_with_uid_from_get_request(self, mock_auth):
-        response = self.client.get('/accounts/login?token=abcd123')
+        response = self.get_token_from_login()
         self.assertEqual(
             mock_auth.authenticate.call_args,
             call(uid='abcd123')
         )
+
+    def test_calls_auth_login_with_user_if_there_is_none(self, mock_auth):
+        response = self.get_token_from_login()
+        self.assertEqual(
+            mock_auth.login.call_args,
+            call(response.wsgi_request, mock_auth.authenticate.return_value)
+        )
+
+    def test_does_not_login_if_user_is_not_authenticated(self, mock_auth):
+        mock_auth.authenticate.return_value = None
+        self.get_token_from_login()
+        self.assertEqual(mock_auth.login.called, False)
+        
+
 
