@@ -36,9 +36,9 @@ class GetUserTest(TestCase):
         )
         self.assertEqual(found_user, desired_user)
 
-        def test_returns_None_if_no_user_with_that_email(self):
-            self.assertIsNone(
-                PasswordlessAuthenticationBackend().get_user('another@example.com')
-            )
+    def test_returns_None_if_no_user_with_that_email(self):
+        self.assertIsNone(
+            PasswordlessAuthenticationBackend().get_user('another@example.com')
+        )
 
         
