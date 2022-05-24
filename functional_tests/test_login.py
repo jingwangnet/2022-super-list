@@ -14,13 +14,13 @@ class LoginTest(FunctionalTest):
     def wait_for_email(self, test_email, subject):
         if not self.staging_server:
             email = mail.outbox[0]
-            self.assertIn(test_email, mail.to)
+            self.assertIn(test_email, email.to)
             self.assertEqual(email.subject, subject)
             return email.body
 
         email_id = None
         start = time.time()
-        inbox = poplib.POP3_SSL('outlook.office365.com')
+        inbox = poplib.POP3_SSL(os.environ.get('TEST_EMAIL_PROVIDE'))
         try:
             inbox.user(test_email)
             inbox.pass_(os.environ.get('TEST_PASSWORD'))
@@ -48,7 +48,6 @@ class LoginTest(FunctionalTest):
         else:
             test_email = 'edith@example.com'
             
-
         self.browser.get(self.live_server_url)
         self.browser.find_element(By.NAME, 'email').send_keys(test_email)
         self.browser.find_element(By.NAME, 'email').send_keys(Keys.ENTER)
@@ -60,7 +59,10 @@ class LoginTest(FunctionalTest):
 
         body = self.wait_for_email(test_email, SUBJECT)
         self.assertIn('Use this link to log in', body)
-        url_search = re.search(r'http://.+/.+$', body)
+        if self.staging_server:
+            url_search = re.search(r'https://.+/.+$', body)
+        else:
+            url_search = re.search(r'http://.+/.+$', body)
         if not url_search:
             self.fail(f'Could not find url in email body:\n{body}')
         url = url_search.group(0)
