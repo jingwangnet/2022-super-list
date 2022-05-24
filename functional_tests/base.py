@@ -16,7 +16,7 @@ class FunctionalTest(StaticLiveServerTestCase):
     
     def setUp(self):
         if STAGING_SERVER := os.environ.get('STAGING_SERVER'):
-            self.live_server_url = 'http://' + STAGING_SERVER
+            self.live_server_url = 'https://' + STAGING_SERVER
 
         if os.environ.get('HEADLESS', False):
             options = Options()
