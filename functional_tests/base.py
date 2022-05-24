@@ -15,8 +15,9 @@ MAX_TIME = 5
 class FunctionalTest(StaticLiveServerTestCase):
     
     def setUp(self):
-        if STAGING_SERVER := os.environ.get('STAGING_SERVER'):
-            self.live_server_url = 'https://' + STAGING_SERVER
+        self.staging_server = os.environ.get('STAGING_SERVER')
+        if self.staging_server:
+            self.live_server_url = 'https://' + self.staging_server
 
         if os.environ.get('HEADLESS', False):
             options = Options()
