@@ -23,7 +23,7 @@ class LoginTest(FunctionalTest):
         inbox = poplib.POP3_SSL('outlook.office365.com')
         try:
             inbox.user(test_email)
-            inbox.pass_(os.environ.get('LIVE_PASSWORD'))
+            inbox.pass_(os.environ.get('TEST_PASSWORD'))
             while time.time() - start < 60:
                 count, _ = inbox.stat()
                 for i in reversed(range(max(1, count - 10), count + 1)):
@@ -44,7 +44,7 @@ class LoginTest(FunctionalTest):
 
     def test_can_get_email_link_to_log_in(self):
         if self.staging_server:
-            test_email = os.environ.get('LIVE_EMAIL')
+            test_email = os.environ.get('TEST_EMAIL')
         else:
             test_email = 'edith@example.com'
             
