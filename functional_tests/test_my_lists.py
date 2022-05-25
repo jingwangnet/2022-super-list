@@ -11,7 +11,7 @@ class MyListsTest(FunctionalTest):
 
     def create_pre_authenticated_session(self, email):
         if self.staging_server:
-            session_key = create_session_on_server(self, email)
+            session_key = create_session_on_server(email)
         else:
             session_key = create_pre_authenticated_session(email)
 
