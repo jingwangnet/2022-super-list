@@ -9,7 +9,7 @@ def create_session_on_server(mail):
         f'ansible-playbook create_session.yml -e email={ mail }',
         shell=True, 
         capture_output=True, 
-        cwd=os.path.jion(settings.BASE_DIR, 'functional_tests/server_tools')
+        cwd=os.path.join(settings.BASE_DIR, 'functional_tests/server_tools')
     )
     
     result = result.stdout.decode('utf-8')
