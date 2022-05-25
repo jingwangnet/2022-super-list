@@ -1,0 +1,23 @@
+---
+- name: Create session for django
+  hosts: all
+  vars_files: 
+    - vars.yml
+  tasks:
+    - name: flush database 
+      community.general.django_manage:
+        command: "flush --noinput"
+        project_path: '{{ source_dir }}' 
+        virtualenv: '{{ virtualenv_dir }}'
+
+    - name: Create session for django 
+      community.general.django_manage:
+        command: "create_session {{ email }}"
+        project_path: '{{ source_dir }}' 
+        virtualenv: '{{ virtualenv_dir }}'
+      register: result
+
+    - name: print result
+      debug: 
+        msg: '{{ result.out }}'
+
