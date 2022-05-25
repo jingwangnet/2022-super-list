@@ -32,7 +32,6 @@ class LoginTest(FunctionalTest):
                     if f'Subject: {subject}' in lines:
                         email_id = i
                         body = '\n'.join(lines)
-                        print(body)
                         return body
                 time.sleep(5)
         finally:
