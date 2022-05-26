@@ -165,5 +165,14 @@ body {
                 }
             }
         }
+
+        > ul { 
+            list-style: none;
+
+            li {
+                font-size: 1.5rem;
+                margin-bottom: 1rem;
+            }
+        }
     }
 }
