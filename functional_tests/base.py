@@ -1,6 +1,7 @@
 from selenium import webdriver
 from selenium.webdriver.chrome.options import Options
 from selenium.webdriver.common.by import By
+from selenium.webdriver.common.keys import Keys
 from selenium.common.exceptions import WebDriverException
 from django.test import LiveServerTestCase
 from django.contrib.staticfiles.testing import StaticLiveServerTestCase
@@ -17,7 +18,7 @@ class FunctionalTest(StaticLiveServerTestCase):
     def setUp(self):
         self.staging_server = os.environ.get('STAGING_SERVER')
         if self.staging_server:
-            self.live_server_url = 'http://' + self.staging_server
+            self.live_server_url = 'https://' + self.staging_server
 
         if os.environ.get('HEADLESS', False):
             options = Options()
@@ -70,4 +71,11 @@ class FunctionalTest(StaticLiveServerTestCase):
 
     def get_item_input_box(self):
         return self.browser.find_element(By.ID, 'id_text')
+
+    def add_list_item(self, item_text):
+        num_rows = len(self.browser.find_elements(By.CSS_SELECTOR, '#id_list_table tr'))
+        self.get_item_input_box().send_keys(item_text)
+        self.get_item_input_box().send_keys(Keys.ENTER)
+        item_number = num_rows + 1
+        self.wait_to_check_text_in_table(f'{item_number}: {item_text}')
 

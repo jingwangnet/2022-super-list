@@ -38,12 +38,7 @@ class ItemValidationTest(FunctionalTest):
     def test_cannot_save_duplicate_items(self):
         self.browser.get(self.live_server_url)
         
-        inputbox = self.get_item_input_box()
-        inputbox.send_keys('Buy milk')
-        self.wait_for(lambda: self.browser.find_element(By.CSS_SELECTOR, '#id_text:valid'))
-        inputbox.send_keys(Keys.ENTER)
-
-        self.wait_to_check_text_in_table('1: Buy milk')
+        self.add_list_item('Buy milk')
 
         inputbox = self.get_item_input_box()
         inputbox.send_keys('Buy milk')
