@@ -31,3 +31,6 @@ def view_list(request, pk):
     context = {'list': list_, 'form': form}
     return render(request, 'view.html', context)
 
+
+def my_list(request, email):
+    return render(request, 'my.html')

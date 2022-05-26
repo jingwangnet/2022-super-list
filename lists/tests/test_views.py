@@ -147,11 +147,8 @@ class ViewListTest(TestCase):
         self.assertContains(response, escape(DUPLICATE_ITEM_ERROR))
         self.assertEqual(1, Item.objects.count())
 
-
-
-  
-
-
+class MyListsTest(TestCase):
     
-
-
+    def test_my_lists_url_render_my_lists_template(self):
+        response = self.client.get('/lists/users/a@b.com/')
+        self.assertTemplateUsed(response, 'my.html')

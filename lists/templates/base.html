@@ -19,6 +19,7 @@
       </div>
       <nav class="navbar">
         {% if user.email %}
+        <p id="my-list"><a href="{% url 'lists:my' user.email %}">My lists</a></p>
            <p>Logged in as {{ user.email }}</p>
            <p><a href="{% url 'accounts:logout' %}">Log out</a></p>
         {% else %}
@@ -44,6 +45,7 @@
   
     <main>
       <h1>{% block header %}{% endblock %}</h1>
+      {% block list_form %}
       <form method="POST" action="{% block action_url %}{% endblock %}">
         {{ form.text }}
         {% csrf_token %}
@@ -53,7 +55,10 @@
         </div>
         {% endif %}
       </form>
+      {% endblock %}
       {% block content %}
+      {% endblock %}
+      {% block extra_content %}
       {% endblock %}
     </main>
 

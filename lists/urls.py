@@ -20,6 +20,7 @@ from .views import *
 urlpatterns = [
     path('new', new_list, name='new'),
     path('<int:pk>/', view_list, name='view'),
+    path('users/<str:email>/', my_list, name='my'),
 ]
 
 app_name = 'lists'
