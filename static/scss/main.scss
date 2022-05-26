@@ -104,7 +104,7 @@ body {
         }
         @include media_breakpoint_up(md) {
             & > * {
-                @include make-container(200px);
+                @include make-container(100px);
             }
         }
         @include media_breakpoint_up(xl) {
