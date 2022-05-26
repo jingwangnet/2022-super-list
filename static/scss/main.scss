@@ -161,6 +161,10 @@ body {
                     }
                     td {
                         word-break: break-all;
+                        margin-bottom: 1rem;
+                        @include media_breakpoint_up(md) {
+                            padding: 1rem;
+                        }
                     }
                 }
             }
