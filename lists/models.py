@@ -14,6 +14,10 @@ class List(models.Model):
     def get_absolute_url(self):
         return reverse('lists:view', args=[self.pk])
 
+    @property
+    def name(self):
+        return self.item_set.first().text
+
 class Item(models.Model):
     text = models.TextField()
     list = models.ForeignKey(List, on_delete=models.CASCADE)

@@ -49,16 +49,16 @@ class MyListsTest(FunctionalTest):
 
         self.browser.find_element(By.LINK_TEXT, 'My lists').click()
         self.wait_for(
-            lambda: self.browser.find_element(By.LINK_TEXT, 'click cows')
+            lambda: self.browser.find_element(By.LINK_TEXT, 'Click cows')
         )
-        self.borwser.find_element(By.LINK_TEXT, 'Click cows').click()
+        self.browser.find_element(By.LINK_TEXT, 'Click cows').click()
         self.wait_for(
             lambda: self.assertEqual(self.browser.current_url, second_list_url)
         )
 
         self.browser.find_element(By.LINK_TEXT, 'Log out').click()
         self.wait_for(lambda: self.assertEqual(
-            self.browser.find_elements(By.LINK_TEXT('My lists')),
+            self.browser.find_elements(By.LINK_TEXT, 'My lists'),
             []
         ))
 
